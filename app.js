@@ -1,5 +1,8 @@
+require("dotenv").config();
+
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
@@ -7,6 +10,8 @@ const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/https-error");
 
 const app = express();
+
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 
 app.use(bodyParser.json());
 
@@ -27,4 +32,11 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-app.listen(5000);
+mongoose
+    .connect(MONGODB_URI)
+    .then(() => {
+        app.listen(5000);
+    })
+    .catch((err) => {
+        console.log(err);
+    });

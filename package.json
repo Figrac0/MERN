@@ -12,8 +12,11 @@
   "dependencies": {
     "axios": "^1.13.6",
     "body-parser": "^1.20.4",
+    "dotenv": "^17.3.1",
     "express": "^4.22.1",
     "express-validator": "^7.3.1",
+    "mongoose": "^9.3.3",
+    "mongoose-unique-validator": "^6.1.1",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
