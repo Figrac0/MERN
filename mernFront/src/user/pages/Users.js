@@ -3,57 +3,41 @@ import { useEffect, useState } from "react";
 import UsersList from "../components/UsersList";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 const Users = () => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState();
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [loadedUsers, setLoadedUsers] = useState([]);
 
     useEffect(() => {
         let isMounted = true;
 
-        const sendRequest = async () => {
+        const fetchUsers = async () => {
             try {
-                const response = await fetch("http://localhost:5000/api/users");
-                const responseData = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(responseData.message);
-                }
+                const responseData = await sendRequest(
+                    "http://localhost:5000/api/users",
+                );
 
                 if (isMounted) {
                     setLoadedUsers(responseData.users || []);
                 }
-            } catch (err) {
-                if (isMounted) {
-                    setError(err.message || "Something went wrong.");
-                }
-            } finally {
-                if (isMounted) {
-                    setIsLoading(false);
-                }
-            }
+            } catch (err) {}
         };
-
-        sendRequest();
+        fetchUsers();
 
         return () => {
             isMounted = false;
         };
-    }, []);
-
-    const errorHandler = () => {
-        setError(null);
-    };
+    }, [sendRequest]);
 
     return (
         <>
+            <ErrorModal error={error} onClear={clearError} />
             {isLoading && (
                 <div className="center">
-                    <LoadingSpinner asOverlay />
+                    <LoadingSpinner />
                 </div>
             )}
-            <ErrorModal error={error} onClear={errorHandler} />
             {!isLoading && <UsersList items={loadedUsers} />}
         </>
     );
