@@ -16,6 +16,11 @@ const PlaceItem = (props) => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const auth = useContext(AuthContext);
+    const imageUrl = props.image
+        ? props.image.startsWith("http")
+            ? props.image.replace(/\\/g, "/")
+            : `http://localhost:5000/${props.image.replace(/\\/g, "/")}`
+        : "";
 
     const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -76,7 +81,7 @@ const PlaceItem = (props) => {
                 <Card className="place-item__content">
                     {isLoading && <LoadingSpinner asOverlay />}
                     <div className="place-item__image">
-                        <img src={props.image} alt={props.title} />
+                        <img src={imageUrl} alt={props.title} />
                     </div>
                     <div className="place-item__info">
                         <h2>{props.title}</h2>

@@ -5,12 +5,18 @@ import Card from "../../shared/components/UIElements/Card";
 import "./UserItem.css";
 
 const UsersItem = (props) => {
+    const imageUrl = props.image
+        ? props.image.startsWith("http")
+            ? props.image.replace(/\\/g, "/")
+            : `http://localhost:5000/${props.image.replace(/\\/g, "/")}`
+        : "";
+
     return (
         <li className="user-item">
             <Card className="user-item__content">
                 <Link to={`/${props.id}/places`}>
                     <div className="user-item__image">
-                        <Avatar image={props.image} alt={props.name} />
+                        <Avatar image={imageUrl} alt={props.name} />
                     </div>
                     <div className="user-item__info">
                         <h2>{props.name}</h2>

@@ -27,6 +27,15 @@ const signup = async (req, res, next) => {
         );
     }
 
+    if (!req.file) {
+        return next(
+            new HttpError(
+                "Invalid inputs passed, please provide an image.",
+                422,
+            ),
+        );
+    }
+
     const { name, email, password } = req.body;
 
     let existingUser;
@@ -52,7 +61,7 @@ const signup = async (req, res, next) => {
     const createdUser = new User({
         name,
         email,
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg",
+        image: `http://localhost:5000/${req.file.path.replace(/\\/g, "/")}`,
         password,
         places: [],
     });

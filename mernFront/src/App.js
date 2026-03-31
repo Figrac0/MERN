@@ -14,58 +14,43 @@ import UpdatePlace from "./places/pages/UpdatePlace";
 import Auth from "./user/pages/Auth";
 import { AuthContext } from "./shared/context/auth-context";
 
-const App = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+const AUTH_STORAGE_KEY = "userData";
 
-    const [userId, setUserId] = useState(null);
+const App = () => {
+    const [storedAuthData] = useState(() => {
+        const storedData = localStorage.getItem(AUTH_STORAGE_KEY);
+
+        if (!storedData) {
+            return { isLoggedIn: false, userId: null };
+        }
+
+        try {
+            const parsedData = JSON.parse(storedData);
+            return {
+                isLoggedIn: !!parsedData?.isLoggedIn,
+                userId: parsedData?.userId || null,
+            };
+        } catch (err) {
+            return { isLoggedIn: false, userId: null };
+        }
+    });
+    const [isLoggedIn, setIsLoggedIn] = useState(storedAuthData.isLoggedIn);
+    const [userId, setUserId] = useState(storedAuthData.userId);
 
     const login = useCallback((uid) => {
         setIsLoggedIn(true);
         setUserId(uid);
+        localStorage.setItem(
+            AUTH_STORAGE_KEY,
+            JSON.stringify({ isLoggedIn: true, userId: uid }),
+        );
     }, []);
 
     const logout = useCallback(() => {
         setIsLoggedIn(false);
         setUserId(null);
+        localStorage.removeItem(AUTH_STORAGE_KEY);
     }, []);
-
-    let routes;
-
-    if (isLoggedIn) {
-        routes = (
-            <>
-                <Route path="/" exact>
-                    <Users />
-                </Route>
-                <Route path="/:userId/places" exact>
-                    <UserPlaces />
-                </Route>
-                <Route path="/places/new" exact>
-                    <NewPlace />
-                </Route>
-
-                <Route path="/places/:placeId" exact>
-                    <UpdatePlace />
-                </Route>
-                <Redirect to="/" />
-            </>
-        );
-    } else {
-        routes = (
-            <>
-                <Route path="/" exact>
-                    <Users />
-                </Route>
-                <Route path="/:userId/places" exact>
-                    <UserPlaces />
-                </Route>
-                <Route path="/auth">
-                    <Auth />
-                </Route>
-                <Redirect to="/auth" />
-            </>
-        );
-    }
 
     return (
         <AuthContext.Provider
@@ -78,7 +63,30 @@ const App = () => {
             <Router>
                 <MainNavigation />
                 <main>
-                    <Switch>{routes}</Switch>
+                    <Switch>
+                        <Route path="/" exact>
+                            <Users />
+                        </Route>
+                        <Route path="/:userId/places" exact>
+                            <UserPlaces />
+                        </Route>
+                        {isLoggedIn && (
+                            <Route path="/places/new" exact>
+                                <NewPlace />
+                            </Route>
+                        )}
+                        {isLoggedIn && (
+                            <Route path="/places/:placeId" exact>
+                                <UpdatePlace />
+                            </Route>
+                        )}
+                        {!isLoggedIn && (
+                            <Route path="/auth" exact>
+                                <Auth />
+                            </Route>
+                        )}
+                        <Redirect to={isLoggedIn ? "/" : "/auth"} />
+                    </Switch>
                 </main>
             </Router>
         </AuthContext.Provider>
