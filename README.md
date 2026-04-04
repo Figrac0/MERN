@@ -27,7 +27,7 @@ Your Places is a full-stack MERN application for collecting, organizing, and exp
 
 <div align="center">
   <details>
-    <summary><strong>Показать изображения</strong></summary>
+    <summary><strong>Show images</strong></summary>
     <br/>
 
 | 1 | 2 |
