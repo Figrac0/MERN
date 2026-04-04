@@ -1,6 +1,37 @@
 # Your Places
 
+---
+
+<div align="center">
+  <a href="https://mern-your-place.vercel.app/" target="_blank">
+    <img
+      src="https://github.com/Figrac0/Figrac0/blob/main/href.svg"
+      alt="Quick Access - Visit Site"
+      width="50%"
+    />
+  </a>
+</div>
+
+---
+
+
 Your Places is a full-stack MERN application for collecting, organizing, and exploring real places. It allows people to create an account, upload a profile photo, save places with images and addresses, browse other users' collections, open locations on a map, and get suggestions through an in-app travel assistant.
+
+---
+
+## 📸 Project Preview
+
+| 1 | 2 |
+| :---: | :---: |
+| <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/1.png" width="600"/> | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/2.png" width="600"/> |
+| <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/3.png" width="600"/> | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/4.png" width="600"/> |
+
+| 1 | 2 |
+| :---: | :---: |
+| <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/1g.gif" width="800"/> | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/2g.gif" width="800"/> |
+
+---
+
 
 The project is built as a separated frontend and backend:
 
