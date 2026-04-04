@@ -22,15 +22,31 @@ export const useHttpClient = () => {
                     headers,
                     signal: httpAbortCtrl.signal,
                 });
+                const responseText = await response.text();
+                let responseData = null;
 
-                const responseData = await response.json();
+                if (responseText) {
+                    try {
+                        responseData = JSON.parse(responseText);
+                    } catch (parseError) {
+                        responseData = {
+                            message:
+                                response.status >= 400
+                                    ? "Unexpected server response. Please check the backend URL and try again."
+                                    : responseText,
+                        };
+                    }
+                }
 
                 activeHttpRequests.current = activeHttpRequests.current.filter(
                     (reqCtrl) => reqCtrl !== httpAbortCtrl,
                 );
 
                 if (!response.ok) {
-                    throw new Error(responseData.message);
+                    throw new Error(
+                        responseData?.message ||
+                            `Request failed with status ${response.status}.`,
+                    );
                 }
 
                 if (isMounted.current) {
@@ -44,7 +60,11 @@ export const useHttpClient = () => {
 
                 if (isMounted.current) {
                     if (err.name !== "AbortError") {
-                        setError(err.message);
+                        setError(
+                            err.message === "Failed to fetch"
+                                ? "Could not connect to the server. Please check that the backend is running and the API URL is correct."
+                                : err.message,
+                        );
                     }
                     setIsLoading(false);
                 }

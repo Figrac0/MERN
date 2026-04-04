@@ -4,6 +4,10 @@ const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/https-error");
 const User = require("../models/user");
+const {
+    deleteStoredImage,
+    storeUploadedImage,
+} = require("../util/asset-storage");
 
 const getUser = async (req, res, next) => {
     let users;
@@ -39,6 +43,7 @@ const signup = async (req, res, next) => {
     }
 
     const { name, email, password } = req.body;
+    let uploadedImage;
 
     let existingUser;
 
@@ -71,10 +76,17 @@ const signup = async (req, res, next) => {
         return next(error);
     }
 
+    try {
+        uploadedImage = await storeUploadedImage(req.file, "users");
+    } catch (err) {
+        return next(err);
+    }
+
     const createdUser = new User({
         name,
         email,
-        image: `http://localhost:5000/${req.file.path.replace(/\\/g, "/")}`,
+        image: uploadedImage.imageUrl,
+        imagePublicId: uploadedImage.imagePublicId || undefined,
         password: hashedPassword,
         places: [],
     });
@@ -82,6 +94,10 @@ const signup = async (req, res, next) => {
     try {
         await createdUser.save();
     } catch (err) {
+        await deleteStoredImage({
+            imagePublicId: uploadedImage?.imagePublicId,
+            imagePath: uploadedImage?.imageUrl,
+        });
         const error = new HttpError(
             "Signing up failed, please try again later",
             500,
@@ -97,6 +113,10 @@ const signup = async (req, res, next) => {
             { expiresIn: "1h" },
         );
     } catch (err) {
+        await deleteStoredImage({
+            imagePublicId: uploadedImage?.imagePublicId,
+            imagePath: uploadedImage?.imageUrl,
+        });
         const error = new HttpError(
             "Signing up failed, please try again later",
             500,
@@ -107,6 +127,7 @@ const signup = async (req, res, next) => {
     res.status(201).json({
         userId: createdUser.id,
         email: createdUser.email,
+        image: createdUser.image,
         token,
     });
 };
@@ -172,6 +193,7 @@ const login = async (req, res, next) => {
     res.status(200).json({
         userId: existingUser.id,
         email: existingUser.email,
+        image: existingUser.image,
         token,
     });
 };

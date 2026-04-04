@@ -1,10 +1,14 @@
 .side-drawer {
     position: fixed;
-    left: 0;
-    top: 0;
+    left: 0.85rem;
+    top: 0.85rem;
     z-index: 100;
-    width: 70%;
-    height: 100vh;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    width: min(20rem, calc(100% - 1.7rem));
+    height: calc(100vh - 1.7rem);
+    background: linear-gradient(180deg, rgba(255, 251, 245, 0.97), rgba(249, 243, 234, 0.94));
+    box-shadow: 0 26px 70px rgba(10, 29, 29, 0.22);
+    border-radius: 2rem;
+    padding: 1.1rem;
+    border: 1px solid rgba(17, 38, 38, 0.08);
+    backdrop-filter: blur(18px);
 }

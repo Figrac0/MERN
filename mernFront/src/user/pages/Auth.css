@@ -1,15 +1,78 @@
-.authentication__header {
-  color: white;
-  text-align: center;
+.auth-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.auth-page__intro {
+  display: grid;
+  gap: 1.2rem;
+  padding: 2rem 0;
+}
+
+.auth-page__intro h1 {
+  margin: 0;
+  font-size: clamp(2.1rem, 4.5vw, 4rem);
+  max-width: 12ch;
+}
+
+.auth-page__benefits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.auth-page__benefit {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.auth-page__benefit strong {
+  font-size: 1rem;
+}
+
+.auth-page__benefit span,
+.authentication__heading p {
+  color: var(--muted);
 }
 
 .authentication {
-  width: 90%;
-  max-width: 25rem;
-  margin: 7rem auto;
-  text-align: center;
+  width: 100%;
+  text-align: left;
+  padding: 1.5rem;
+}
+
+.authentication__heading {
+  display: grid;
+  gap: 0.65rem;
+  margin-bottom: 1.2rem;
+}
+
+.authentication__heading h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.authentication__heading p {
+  margin: 0;
 }
 
 .authentication form {
   margin-bottom: 1rem;
+}
+
+.authentication form .button {
+  margin-top: 0.5rem;
+}
+
+.authentication__switch {
+  width: 100%;
+}
+
+@media (max-width: 980px) {
+  .auth-page,
+  .auth-page__benefits {
+    grid-template-columns: 1fr;
+  }
 }

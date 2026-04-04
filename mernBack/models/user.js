@@ -22,6 +22,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    imagePublicId: {
+        type: String,
+        required: false,
+    },
     places: [{ type: mongoose.Types.ObjectId, required: true, ref: "Place" }],
 });
 

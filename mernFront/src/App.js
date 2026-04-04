@@ -6,6 +6,7 @@ import {
     Switch,
 } from "react-router-dom";
 
+import Home from "./home/pages/Home";
 import Users from "./user/pages/Users";
 import NewPlace from "./places/pages/NewPlace";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
@@ -26,6 +27,7 @@ const getStoredAuthData = () => {
             return {
                 token: null,
                 userId: null,
+                userImage: null,
                 tokenExpirationDate: null,
             };
         }
@@ -33,12 +35,14 @@ const getStoredAuthData = () => {
         return {
             token: storedData.token,
             userId: storedData.userId,
+            userImage: storedData.userImage || null,
             tokenExpirationDate: new Date(storedData.expiration),
         };
     } catch (err) {
         return {
             token: null,
             userId: null,
+            userImage: null,
             tokenExpirationDate: null,
         };
     }
@@ -47,23 +51,26 @@ const getStoredAuthData = () => {
 const App = () => {
     const [storedAuthData] = useState(getStoredAuthData);
     const [token, setToken] = useState(storedAuthData.token);
+    const [userImage, setUserImage] = useState(storedAuthData.userImage);
     const [tokenExpirationDate, setTokenExpirationDate] = useState(
         storedAuthData.tokenExpirationDate,
     );
     const [userId, setUserId] = useState(storedAuthData.userId);
 
-    const login = useCallback((uid, token, expirationDate) => {
+    const login = useCallback((uid, token, expirationDate, image) => {
         const tokenExpirationDate =
             expirationDate || new Date(new Date().getTime() + 60 * 60 * 1000);
 
         setToken(token);
         setUserId(uid);
+        setUserImage(image || null);
         setTokenExpirationDate(tokenExpirationDate);
         localStorage.setItem(
             "userData",
             JSON.stringify({
                 userId: uid,
                 token: token,
+                userImage: image || null,
                 expiration: tokenExpirationDate.toISOString(),
             }),
         );
@@ -72,6 +79,7 @@ const App = () => {
     const logout = useCallback(() => {
         setToken(null);
         setUserId(null);
+        setUserImage(null);
         setTokenExpirationDate(null);
         localStorage.removeItem("userData");
     }, []);
@@ -89,40 +97,35 @@ const App = () => {
 
     let routes;
 
-    if (token) {
-        routes = (
-            <Switch>
-                <Route path="/" exact>
-                    <Users />
-                </Route>
-                <Route path="/:userId/places" exact>
-                    <UserPlaces />
-                </Route>
+    routes = (
+        <Switch>
+            <Route path="/" exact>
+                <Home />
+            </Route>
+            <Route path="/community" exact>
+                <Users />
+            </Route>
+            <Route path="/:userId/places" exact>
+                <UserPlaces />
+            </Route>
+            {token && (
                 <Route path="/places/new" exact>
                     <NewPlace />
                 </Route>
-                <Route path="/places/:placeId">
+            )}
+            {token && (
+                <Route path="/places/:placeId" exact>
                     <UpdatePlace />
                 </Route>
-                <Redirect to="/" />
-            </Switch>
-        );
-    } else {
-        routes = (
-            <Switch>
-                <Route path="/" exact>
-                    <Users />
-                </Route>
-                <Route path="/:userId/places" exact>
-                    <UserPlaces />
-                </Route>
-                <Route path="/auth">
+            )}
+            {!token && (
+                <Route path="/auth" exact>
                     <Auth />
                 </Route>
-                <Redirect to="/auth" />
-            </Switch>
-        );
-    }
+            )}
+            <Redirect to="/" />
+        </Switch>
+    );
 
     return (
         <AuthContext.Provider
@@ -130,6 +133,7 @@ const App = () => {
                 isLoggedIn: !!token,
                 token: token,
                 userId: userId,
+                userImage: userImage,
                 login: login,
                 logout: logout,
             }}>

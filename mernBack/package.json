@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=22 <23"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "node app.js",
+    "migrate:cloudinary": "node scripts/migrate-images-to-cloudinary.js"
   },
   "author": "",
   "license": "ISC",
@@ -22,7 +26,5 @@
     "multer": "^2.1.1",
     "uuid": "^8.3.2"
   },
-  "devDependencies": {
-    "nodemon": "^1.19.4"
-  }
+  "devDependencies": {}
 }

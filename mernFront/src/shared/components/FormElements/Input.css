@@ -9,33 +9,49 @@
 }
 
 .form-control label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  color: var(--ink);
+  letter-spacing: 0.01em;
 }
 
 .form-control input,
 .form-control textarea {
   width: 100%;
   font: inherit;
-  border: 1px solid #ccc;
-  background: #f8f8f8;
-  padding: 0.15rem 0.25rem;
+  border: 1px solid rgba(17, 38, 38, 0.14);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.88);
+  padding: 0.9rem 1rem;
+  color: var(--ink);
+  transition: border-color 180ms ease, box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.form-control input::placeholder,
+.form-control textarea::placeholder {
+  color: rgba(89, 112, 109, 0.72);
 }
 
 .form-control input:focus,
 .form-control textarea:focus {
   outline: none;
-  background: #ebebeb;
-  border-color: #510077;
+  border-color: rgba(232, 108, 79, 0.58);
+  box-shadow: 0 0 0 0.25rem rgba(232, 108, 79, 0.1);
+}
+
+.form-control textarea {
+  resize: vertical;
+  min-height: 8rem;
 }
 
 .form-control--invalid label,
 .form-control--invalid p {
-  color: red;
+  color: #b33b3b;
 }
 
 .form-control--invalid input,
 .form-control--invalid textarea {
-  border-color: red;
-  background: #ffd1d1;
+  border-color: rgba(179, 59, 59, 0.55);
+  background: rgba(255, 238, 238, 0.92);
 }

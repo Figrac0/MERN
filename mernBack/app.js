@@ -4,20 +4,33 @@ const path = require("path");
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 
+const assistantRoutes = require("./routes/assistant-routes");
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
 
 const HttpError = require("./models/https-error");
+const connectDatabase = require("./util/db");
 
 const app = express();
-
-const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 
 app.use(bodyParser.json());
 
 app.use("/uploads/images", express.static(path.join("uploads", "images")));
+
+app.use(async (req, res, next) => {
+    try {
+        await connectDatabase();
+        next();
+    } catch (err) {
+        next(
+            new HttpError(
+                "Could not connect to the database. Please try again later.",
+                500,
+            ),
+        );
+    }
+});
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -39,6 +52,8 @@ app.use((req, res, next) => {
 
 app.use("/api/places", placesRoutes);
 
+app.use("/api/assistant", assistantRoutes);
+
 app.use("/api/users", usersRoutes);
 
 app.use((req, res, next) => {
@@ -47,7 +62,7 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-    if (req.file) {
+    if (req.file && req.file.path) {
         fs.unlink(req.file.path, (err) => {
             console.log(err);
         });
@@ -60,11 +75,14 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-mongoose
-    .connect(MONGODB_URI)
-    .then(() => {
-        app.listen(5000);
-    })
-    .catch((err) => {
-        console.log(err);
-    });
+module.exports = app;
+
+if (!process.env.VERCEL) {
+    connectDatabase()
+        .then(() => {
+            app.listen(5000);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}

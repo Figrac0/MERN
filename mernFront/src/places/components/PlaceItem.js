@@ -9,6 +9,11 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
 import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "../../shared/hooks/http-hook";
+import { buildApiUrl, buildAssetUrl } from "../../shared/util/url";
+import {
+    extractCity,
+    inferPlaceCategory,
+} from "../../shared/util/place-insights";
 
 import "./PlaceItem.css";
 
@@ -16,11 +21,13 @@ const PlaceItem = (props) => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const auth = useContext(AuthContext);
-    const imageUrl = props.image
-        ? props.image.startsWith("http")
-            ? props.image.replace(/\\/g, "/")
-            : `http://localhost:5000/${props.image.replace(/\\/g, "/")}`
-        : "";
+    const imageUrl = buildAssetUrl(props.image);
+    const cityLabel = extractCity(props.address);
+    const categoryLabel = inferPlaceCategory({
+        title: props.title,
+        description: props.description,
+        address: props.address,
+    });
 
     const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -34,7 +41,7 @@ const PlaceItem = (props) => {
         setShowConfirmModal(false);
         try {
             await sendRequest(
-                `http://localhost:5000/api/places/${props.id}`,
+                buildApiUrl(`/places/${props.id}`),
                 "DELETE",
                 null,
                 {
@@ -86,11 +93,23 @@ const PlaceItem = (props) => {
                     {isLoading && <LoadingSpinner asOverlay />}
                     <div className="place-item__image">
                         <img src={imageUrl} alt={props.title} />
+                        <div className="place-item__chips">
+                            <span>{cityLabel}</span>
+                            <span>{categoryLabel}</span>
+                        </div>
                     </div>
                     <div className="place-item__info">
                         <h2>{props.title}</h2>
                         <h3>{props.address}</h3>
                         <p>{props.description}</p>
+                        <div className="place-item__meta">
+                            <span>Detailed stop</span>
+                            <span>
+                                {props.description.length > 50
+                                    ? "Rich description"
+                                    : "Compact note"}
+                            </span>
+                        </div>
                     </div>
                     <div className="place-item__actions">
                         <Button inverse onClick={openMapHandler}>

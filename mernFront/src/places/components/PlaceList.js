@@ -8,9 +8,12 @@ const PlaceList = (props) => {
     if (props.items.length === 0) {
         return (
             <div className="place-list center">
-                <Card>
-                    <h2>No places found. Maybe create one?</h2>
-                    <Button to="/places/new">Share Place</Button>
+                <Card className="empty-panel">
+                    <h2>{props.emptyTitle || "No places found. Maybe create one?"}</h2>
+                    {props.emptyText && <p>{props.emptyText}</p>}
+                    <Button to={props.emptyActionTo || "/places/new"}>
+                        {props.emptyActionText || "Share Place"}
+                    </Button>
                 </Card>
             </div>
         );

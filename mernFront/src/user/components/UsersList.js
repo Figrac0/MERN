@@ -8,9 +8,10 @@ const UsersList = (props) => {
 
     if (items.length === 0) {
         return (
-            <div className="center">
-                <Card>
-                    <h2>Found no users.</h2>
+            <div className="center users-list__empty">
+                <Card className="empty-panel">
+                    <h2>{props.emptyTitle || "Found no users."}</h2>
+                    {props.emptyText && <p>{props.emptyText}</p>}
                 </Card>
             </div>
         );
