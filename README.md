@@ -21,10 +21,14 @@ Your Places is a full-stack MERN application for collecting, organizing, and exp
 
 ## 📸 Project Preview
 
+<div align="center">
+  
 | 1 |
 | :---: |
 | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/1g.gif" width="700"/> |
 | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/2g.gif" width="700"/> |
+
+</div>
 
 <div align="center">
   <details>
