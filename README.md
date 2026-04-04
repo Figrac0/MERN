@@ -26,9 +26,17 @@ Your Places is a full-stack MERN application for collecting, organizing, and exp
 | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/1.png" width="600"/> | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/2.png" width="600"/> |
 | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/3.png" width="600"/> | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/4.png" width="600"/> |
 
+<div align="center">
+  <details>
+    <summary><strong>GIF</strong></summary>
+    <br/>
+
 | 1 | 2 |
 | :---: | :---: |
-| <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/1g.gif" width="800"/> | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/2g.gif" width="800"/> |
+| <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/1g.gif" width="600"/> | <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/2g.gif" width="600"/> |
+
+  </details>
+</div>
 
 ---
 
