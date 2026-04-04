@@ -40,8 +40,6 @@ Your Places is a full-stack MERN application for collecting, organizing, and exp
 
 ---
 
----
-
 
 The project is built as a separated frontend and backend:
 
