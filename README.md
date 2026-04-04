@@ -110,6 +110,12 @@ The project combines practical utility and stronger presentation:
 
 This makes it suitable not only as a learning project, but also as a portfolio project that demonstrates product thinking, UX work, backend architecture, deployment planning, and AI-assisted interaction.
 
+<div align="center">
+  
+ <img src="https://github.com/Figrac0/MERN/blob/MERN/gitres/MERN.png" width="700"/> 
+
+</div>
+
 ---
 
 ## Main Features
